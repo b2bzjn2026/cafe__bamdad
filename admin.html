@@ -3,43 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پنل مدیریت | کافه کتاب بامداد</title>
+  <title>پنل مدیریت | کافه بامداد</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { font-family: Vazirmatn, sans-serif; background: #0e0d0c; color: #f6f4f0; min-height: 100vh; }
-    .tab-btn.active { background: #f59e0b; color: #000; font-weight: 800; }
+    body { font-family: Vazirmatn, sans-serif; background: #140c08; color: #fdfaf6; min-height: 100vh; }
+    .tab-btn.active { background: #d97706; color: #fff; font-weight: 800; }
   </style>
 </head>
 <body class="p-4 pb-16">
   <main class="max-w-2xl mx-auto py-6">
     <header class="text-center mb-6">
-      <h1 class="text-2xl font-black text-amber-400">پنل مدیریت کافه کتاب بامداد</h1>
-      <p class="text-xs text-stone-400 mt-1.5">مدیریت محصولات، قیمت‌ها و گروه‌های منو</p>
+      <h1 class="text-2xl font-black text-amber-500">پنل مدیریت کافه بامداد</h1>
+      <p class="text-xs text-stone-400 mt-1.5">مدیریت محصولات، قیمت‌ها و اطلاعات کافه</p>
     </header>
 
     <p id="status" role="status" class="text-xs mb-4 text-center min-h-[1.25rem]"></p>
 
     <!-- پنل ورود -->
-    <section id="login-panel" class="bg-stone-900 border border-amber-500/20 rounded-2xl p-6 max-w-md mx-auto">
-      <h2 class="font-bold text-lg mb-4">ورود مدیر</h2>
+    <section id="login-panel" class="bg-[#1e140f] border border-amber-600/30 rounded-2xl p-6 max-w-md mx-auto shadow-2xl">
+      <h2 class="font-bold text-lg mb-4 text-amber-400">ورود مدیر</h2>
       <form id="login-form" class="space-y-4">
         <div>
           <label class="block text-xs text-stone-300 mb-1.5">ایمیل مدیر</label>
-          <input id="email" type="email" autocomplete="username" required class="w-full rounded-xl bg-stone-800 border border-stone-700 p-3 text-sm text-white focus:border-amber-500 focus:outline-none" placeholder="admin@example.com">
+          <input id="email" type="email" autocomplete="username" required class="w-full rounded-xl bg-stone-900 border border-stone-700 p-3 text-sm text-white focus:border-amber-500 focus:outline-none" placeholder="admin@example.com">
         </div>
         <div>
           <label class="block text-xs text-stone-300 mb-1.5">رمز عبور</label>
-          <input id="password" type="password" autocomplete="current-password" required class="w-full rounded-xl bg-stone-800 border border-stone-700 p-3 text-sm text-white focus:border-amber-500 focus:outline-none" placeholder="رمز عبور">
+          <input id="password" type="password" autocomplete="current-password" required class="w-full rounded-xl bg-stone-900 border border-stone-700 p-3 text-sm text-white focus:border-amber-500 focus:outline-none" placeholder="رمز عبور">
         </div>
-        <button class="w-full rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold p-3 text-sm transition" type="submit">ورود به پنل مدیریت</button>
+        <button class="w-full rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold p-3 text-sm transition shadow-lg" type="submit">ورود به پنل مدیریت</button>
       </form>
     </section>
 
-    <!-- پنل اصلی مدیریت (فقط دو بخش منو و تنظیمات) -->
+    <!-- پنل اصلی مدیریت -->
     <section id="manager-panel" class="hidden space-y-5">
-      <div class="flex items-center justify-between bg-stone-900/90 border border-stone-800 p-2 rounded-2xl">
+      <div class="flex items-center justify-between bg-[#1e140f]/90 border border-amber-600/30 p-2 rounded-2xl shadow-xl">
         <div class="flex items-center gap-1.5">
           <button type="button" onclick="switchTab('menu')" id="tab-menu" class="tab-btn active px-4 py-2 rounded-xl text-xs transition">محصولات و گروه‌ها</button>
           <button type="button" onclick="switchTab('settings')" id="tab-settings" class="tab-btn px-4 py-2 rounded-xl text-xs text-stone-300 hover:bg-stone-800 transition">اطلاعات کافه</button>
@@ -47,9 +47,9 @@
         <button id="logout" type="button" class="text-xs text-red-400 hover:text-red-300 px-3 py-1.5 rounded-lg border border-red-500/20">خروج</button>
       </div>
 
-      <!-- تب ۱: مدیریت منو و گروه‌ها -->
+      <!-- تب ۱: مدیریت منو -->
       <div id="view-menu" class="space-y-5">
-        <div class="bg-stone-900 border border-amber-500/30 rounded-2xl p-4">
+        <div class="bg-[#1e140f] border border-amber-600/30 rounded-2xl p-4 shadow-xl">
           <button type="button" id="toggle-add-btn" class="w-full flex items-center justify-between text-right font-bold text-sm text-amber-400">
             <span>+ افزودن آیتم یا گروه جدید به منو</span>
             <span id="toggle-add-icon" class="text-lg">+</span>
@@ -59,37 +59,36 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="block text-stone-300 mb-1">نام محصول *</label>
-                <input id="new-title" type="text" required placeholder="مثلاً: چیزبرگر زغالی / پاستا" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white">
+                <input id="new-title" type="text" required placeholder="مثلاً: آش رشته سنتی" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white">
               </div>
               <div>
-                <label class="block text-stone-300 mb-1">نام گروه یا دسته‌بندی (انگلیسی یا فارسی) *</label>
-                <input id="new-category" type="text" required placeholder="مثلاً: fastfood یا fast-food" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white">
-                <p class="text-[10px] text-stone-400 mt-0.5">اگر گروه جدید بنویسید، خودکار در سایت ایجاد می‌شود.</p>
+                <label class="block text-stone-300 mb-1">نام گروه یا دسته‌بندی *</label>
+                <input id="new-category" type="text" required placeholder="traditional یا coffee" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white">
               </div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label class="block text-stone-300 mb-1">قیمت (تومان) *</label>
-                <input id="new-price" type="number" min="0" step="1000" required placeholder="مثلاً: 180000" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white text-left">
+                <input id="new-price" type="number" min="0" step="1000" required placeholder="مثلاً: 110000" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white text-left">
               </div>
               <div>
                 <label class="block text-stone-300 mb-1">برچسب ویژه (اختیاری)</label>
-                <input id="new-badge" type="text" placeholder="مثلاً: پرفروش، غذای گرم، ویژه" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white">
+                <input id="new-badge" type="text" placeholder="مثلاً: پرفروش، تازه پخت" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white">
               </div>
             </div>
 
             <div>
               <label class="block text-stone-300 mb-1">توضیحات کوتاه محصول</label>
-              <input id="new-desc" type="text" placeholder="توضیح مواد اولیه یا ترکیبات..." class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white">
+              <input id="new-desc" type="text" placeholder="توضیح ترکیبات..." class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white">
             </div>
 
             <div>
-              <label class="block text-stone-300 mb-1">لینک یا نام فایل تصویر (اختیاری)</label>
-              <input id="new-image" type="text" placeholder="مثلاً نام عکس در گیت‌هاب یا لینک اینترنتی" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white text-left">
+              <label class="block text-stone-300 mb-1">لینک یا نام فایل تصویر</label>
+              <input id="new-image" type="text" placeholder="لینک عکس..." class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white text-left">
             </div>
 
-            <button type="submit" class="w-full rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-bold p-3 text-sm transition">
+            <button type="submit" class="w-full rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold p-3 text-sm transition">
               ثبت و اضافه کردن به منو
             </button>
           </form>
@@ -101,33 +100,33 @@
         <div id="items" class="space-y-3"></div>
       </div>
 
-      <!-- تب ۲: تنظیمات و اطلاعات کافه -->
-      <div id="view-settings" class="hidden bg-stone-900 border border-amber-500/20 rounded-2xl p-5">
-        <h2 class="font-bold text-base text-amber-400 mb-4">ویرایش اطلاعات و متن‌های سایت</h2>
+      <!-- تب ۲: اطلاعات کافه -->
+      <div id="view-settings" class="hidden bg-[#1e140f] border border-amber-600/30 rounded-2xl p-5 shadow-xl">
+        <h2 class="font-bold text-base text-amber-400 mb-4">ویرایش اطلاعات و متن‌های کافه بامداد</h2>
         <form id="settings-form" class="space-y-3.5 text-xs">
           <div>
             <label class="block text-stone-300 mb-1">شعار زیر لوگو</label>
-            <input id="set-tagline" type="text" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white">
+            <input id="set-tagline" type="text" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white">
           </div>
           <div>
             <label class="block text-stone-300 mb-1">متن بج وضعیت بالای صفحه</label>
-            <input id="set-status-badge" type="text" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white">
+            <input id="set-status-badge" type="text" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white">
           </div>
           <div>
             <label class="block text-stone-300 mb-1">متن کادر معرفی / اطلاعیه کافه</label>
-            <textarea id="set-announcement" rows="3" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white"></textarea>
+            <textarea id="set-announcement" rows="3" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white"></textarea>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-stone-300 mb-1">شماره تماس</label>
-              <input id="set-phone" type="text" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white text-left">
+              <input id="set-phone" type="text" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white text-left">
             </div>
             <div>
               <label class="block text-stone-300 mb-1">نشانی کافه</label>
-              <input id="set-address" type="text" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2.5 text-white">
+              <input id="set-address" type="text" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2.5 text-white">
             </div>
           </div>
-          <button type="submit" class="w-full rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold p-3 text-sm transition">
+          <button type="submit" class="w-full rounded-xl bg-amber-600 hover:bg-amber-500 text-white font-bold p-3 text-sm transition">
             ذخیره اطلاعات کافه
           </button>
         </form>
@@ -138,8 +137,8 @@
   </main>
 
   <script>
-    const SUPABASE_URL = 'https://nandayycunxhlwpemvno.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_yEmf0-1PWxJ0poGaXxaSeg_fuhO7YOD';
+    const SUPABASE_URL = 'https://hiwickvdopltecoqsdar.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhpd2lja3Zkb3BsdGVjb3FzZGFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMzg4ODh9.YOUR_ANON_KEY_HERE'; // کلید انون پروژه خود را اینجا قرار دهید
     const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     function setStatus(message, isError = false) {
@@ -182,39 +181,39 @@
         const isAvailable = item.is_available !== false;
 
         const card = document.createElement('div');
-        card.className = 'bg-stone-900 border border-stone-800 rounded-2xl p-4 space-y-3';
+        card.className = 'bg-[#1e140f] border border-stone-800 rounded-2xl p-4 space-y-3 shadow-md';
 
         card.innerHTML = `
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div class="flex-1 min-w-[160px]">
               <div class="flex items-center gap-2">
                 <span class="font-bold text-sm text-white">${escapeHtml(title)}</span>
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-stone-800 text-amber-300">گروه: ${escapeHtml(item.category || 'general')}</span>
+                <span class="text-[10px] px-2 py-0.5 rounded-full bg-stone-900 text-amber-300">گروه: ${escapeHtml(item.category || 'general')}</span>
                 ${!isAvailable ? '<span class="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-300">ناموجود</span>' : ''}
               </div>
               <p class="text-[11px] text-stone-400 mt-1">${escapeHtml(item.description || '')}</p>
             </div>
             <div class="flex items-center gap-2">
-              <input type="number" step="1000" id="p-${item.id}" value="${item.price}" class="w-28 rounded-xl bg-stone-800 border border-stone-700 p-2 text-sm text-white text-left">
-              <button type="button" onclick="savePrice('${item.id}', document.getElementById('p-${item.id}').value)" class="rounded-xl bg-amber-500 text-black font-bold px-3 py-2 text-xs">ذخیره</button>
+              <input type="number" step="1000" id="p-${item.id}" value="${item.price}" class="w-28 rounded-xl bg-stone-900 border border-stone-700 p-2 text-sm text-white text-left">
+              <button type="button" onclick="savePrice('${item.id}', document.getElementById('p-${item.id}').value)" class="rounded-xl bg-amber-600 text-white font-bold px-3 py-2 text-xs">ذخیره</button>
               <button type="button" onclick="document.getElementById('edit-${item.id}').classList.toggle('hidden')" class="rounded-xl bg-stone-800 text-stone-200 px-3 py-2 text-xs">ویرایش</button>
             </div>
           </div>
           <form id="edit-${item.id}" class="hidden pt-3 border-t border-stone-800 space-y-3 text-xs" onsubmit="updateItem(event, '${item.id}')">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div><label class="text-stone-400">نام محصول</label><input name="title" type="text" required value="${escapeAttr(title)}" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2 text-white mt-1"></div>
-              <div><label class="text-stone-400">نام گروه / دسته‌بندی</label><input name="category" type="text" required value="${escapeAttr(item.category || 'coffee')}" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2 text-white mt-1"></div>
+              <div><label class="text-stone-400">نام محصول</label><input name="title" type="text" required value="${escapeAttr(title)}" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2 text-white mt-1"></div>
+              <div><label class="text-stone-400">نام گروه / دسته‌بندی</label><input name="category" type="text" required value="${escapeAttr(item.category || 'coffee')}" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2 text-white mt-1"></div>
             </div>
-            <div><label class="text-stone-400">توضیحات</label><input name="description" type="text" value="${escapeAttr(item.description || '')}" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2 text-white mt-1"></div>
+            <div><label class="text-stone-400">توضیحات</label><input name="description" type="text" value="${escapeAttr(item.description || '')}" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2 text-white mt-1"></div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              <div><label class="text-stone-400">برچسب ویژه</label><input name="badge" type="text" value="${escapeAttr(item.badge || '')}" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2 text-white mt-1"></div>
-              <div><label class="text-stone-400">لینک تصویر</label><input name="image_url" type="text" value="${escapeAttr(item.image_url || '')}" class="w-full rounded-xl bg-stone-800 border border-stone-700 p-2 text-white text-left mt-1"></div>
+              <div><label class="text-stone-400">برچسب ویژه</label><input name="badge" type="text" value="${escapeAttr(item.badge || '')}" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2 text-white mt-1"></div>
+              <div><label class="text-stone-400">لینک تصویر</label><input name="image_url" type="text" value="${escapeAttr(item.image_url || '')}" class="w-full rounded-xl bg-stone-900 border border-stone-700 p-2 text-white text-left mt-1"></div>
             </div>
             <div class="flex items-center justify-between pt-1">
-              <label class="flex items-center gap-2 cursor-pointer"><input name="is_available" type="checkbox" ${isAvailable ? 'checked' : ''} class="rounded bg-stone-800 text-amber-500"><span class="text-stone-200">موجود در منو</span></label>
+              <label class="flex items-center gap-2 cursor-pointer"><input name="is_available" type="checkbox" ${isAvailable ? 'checked' : ''} class="rounded bg-stone-900 text-amber-500"><span class="text-stone-200">موجود در منو</span></label>
               <div class="flex items-center gap-2">
                 <button type="button" onclick="deleteItem('${item.id}')" class="rounded-xl bg-red-500/20 text-red-300 px-3 py-2 font-bold">حذف</button>
-                <button type="submit" class="rounded-xl bg-emerald-500 text-black px-4 py-2 font-bold">ذخیره تغییرات</button>
+                <button type="submit" class="rounded-xl bg-emerald-600 text-white px-4 py-2 font-bold">ذخیره تغییرات</button>
               </div>
             </div>
           </form>
