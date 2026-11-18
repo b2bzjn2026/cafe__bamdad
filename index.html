@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کافه بامداد | گرمسار</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Vazirmatn', 'sans-serif'] },
+          colors: {
+            bamdad: {
+              wood: '#2c1810',
+              amber: '#d97706',
+              gold: '#f59e0b',
+              card: 'rgba(30, 20, 15, 0.82)',
+              cardLight: 'rgba(45, 30, 22, 0.92)',
+              border: 'rgba(217, 119, 6, 0.25)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background-color: #140c08; color: #fdfaf6; min-height: 100vh; position: relative; }
+    .bg-bamdad-layer { position: fixed; inset: 0; z-index: -2; background-image: url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?q=80&w=1400&auto=format&fit=crop'); background-size: cover; background-position: center; filter: blur(10px); transform: scale(1.1); }
+    .bg-overlay { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at top, rgba(20,12,8,0.7) 0%, rgba(12,7,4,0.92) 100%); }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .category-btn.active-tab { background: linear-gradient(135deg, #d97706, #b45309) !important; color: #fff !important; font-weight: 800; box-shadow: 0 4px 18px rgba(217, 119, 6, 0.4); border-color: #f59e0b !important; }
+  </style>
+</head>
+<body class="font-sans antialiased pb-24 selection:bg-amber-600 selection:text-white">
+
+  <div class="bg-bamdad-layer"></div>
+  <div class="bg-overlay"></div>
+
+  <header class="pt-8 pb-4 px-4">
+    <div class="max-w-xl mx-auto text-center">
+      <div class="inline-block relative mb-3">
+        <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-amber-500 via-amber-700/50 to-transparent shadow-2xl shadow-black/90 mx-auto overflow-hidden">
+          <img src="logo.jpg" onerror="this.src='https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=300&auto=format&fit=crop'" alt="لوگو کافه بامداد" class="w-full h-full object-cover rounded-full border border-stone-800" />
+        </div>
+        <span class="absolute bottom-1 right-1 w-4 h-4 bg-emerald-500 border-2 border-[#140c08] rounded-full shadow-md"></span>
+      </div>
+
+      <div class="flex items-center justify-center gap-2 mb-1">
+        <h1 class="text-3xl font-black tracking-tight text-amber-500 drop-shadow-md">کافه بامداد</h1>
+        <span class="text-amber-400">☕️</span>
+      </div>
+
+      <p id="cafe-tagline" class="text-xs text-amber-200/90 font-medium mb-3 tracking-wide">
+        در این مکان زندگی به شدت جریان دارد ... !!!💚
+      </p>
+
+      <div class="flex items-center justify-center gap-2 text-xs mb-4">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-stone-900/80 backdrop-blur-md text-amber-300 border border-amber-500/30 text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span id="cafe-status-badge">کافه دنج • نوشیدنی، آش سنتی و قهوه</span>
+        </span>
+      </div>
+
+      <div class="flex items-center justify-center gap-2 text-xs max-w-sm mx-auto">
+        <a id="cafe-phone-btn" href="tel:+982334231718" class="flex-1 py-2.5 bg-bamdad-card hover:bg-bamdad-cardLight backdrop-blur-md border border-bamdad-border rounded-xl transition shadow-md flex items-center justify-center gap-1.5 text-stone-200">
+          تماس
+        </a>
+        <a href="#location" class="flex-1 py-2.5 bg-bamdad-card hover:bg-bamdad-cardLight backdrop-blur-md border border-bamdad-border rounded-xl transition shadow-md flex items-center justify-center gap-1.5 text-stone-200">
+          مسیریابی
+        </a>
+        <a href="https://www.instagram.com/cafe__bamdad/" target="_blank" class="flex-1 py-2.5 bg-gradient-to-r from-amber-700 via-amber-600 to-yellow-600 hover:opacity-90 rounded-xl text-white font-medium transition shadow-lg flex items-center justify-center gap-1.5">
+          اینستاگرام
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <section class="max-w-xl mx-auto px-4 mt-2 mb-3">
+    <div class="relative mb-3">
+      <input type="text" id="menu-search" oninput="filterAndSearch()" placeholder="جستجوی قهوه، آش، شیک یا عنوان..." 
+             class="w-full py-3 pr-10 pl-4 bg-bamdad-card backdrop-blur-md border border-bamdad-border rounded-2xl text-xs text-white placeholder-stone-400 focus:outline-none focus:border-amber-500 transition shadow-inner">
+    </div>
+
+    <div class="bg-bamdad-card backdrop-blur-md p-3.5 rounded-2xl border border-bamdad-border shadow-lg flex items-center gap-3">
+      <p id="cafe-announcement" class="text-[11px] text-stone-300 leading-relaxed">
+        کافه بامداد؛ فضایی گرم و چوبی در گرمسار، جایی برای طعم‌های اصیل، آش‌های خانگی و آرامش لحظه‌ها.
+      </p>
+    </div>
+  </section>
+
+  <nav class="sticky top-0 z-30 bg-[#140c08]/90 backdrop-blur-xl py-2.5 border-y border-bamdad-border">
+    <div class="max-w-xl mx-auto px-4">
+      <div id="category-tabs" class="flex items-center gap-1.5 overflow-x-auto hide-scrollbar text-xs font-medium pe-2">
+        <!-- تب‌های پویا -->
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-xl mx-auto px-4 mt-5">
+    <div id="menu-container" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+      <!-- اقلام منو -->
+    </div>
+  </main>
+
+  <footer id="location" class="max-w-xl mx-auto px-4 mt-8 space-y-3">
+    <div class="bg-bamdad-card backdrop-blur-md rounded-2xl p-4 border border-bamdad-border space-y-3 shadow-2xl">
+      <h3 class="text-sm font-bold text-white">نشانی و دسترسی</h3>
+      <p id="cafe-address" class="text-xs text-stone-200 leading-relaxed">
+        گرمسار، خیابان مصطفی خمینی، نبش پاساژ پاسارگاد (زاپاتای قدیم)
+      </p>
+      <div class="flex justify-between items-center text-xs pt-2 border-t border-bamdad-border">
+        <span class="text-stone-300">تلفن تماس:</span>
+        <a id="cafe-phone-text" href="tel:+982334231718" class="font-bold text-amber-400 tracking-wider">۰۲۳-۳۴۲۳۱۷۱۸</a>
+      </div>
+    </div>
+    <div class="text-center text-[10px] text-stone-500 pt-2">
+      منوی دیجیتال کافه بامداد · گرمسار
+    </div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://nandayycunxhlwpemvno.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_yEmf0-1PWxJ0poGaXxaSeg_fuhO7YOD';
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let allMenuItems = [];
+    let currentCategory = 'all';
+
+    const CATEGORY_NAMES = {
+      'all': 'همه آیتم‌ها',
+      'coffee': 'قهوه و بار گرم',
+      'traditional': 'آش و غذاهای سنتی',
+      'cold': 'بار سرد و شیک',
+      'cake': 'کیک و دسر'
+    };
+
+    function escapeHtml(str) { return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])); }
+
+    async function loadSiteData() {
+      const { data: settings } = await db.from('cafe_settings').select('*').eq('id', 1).maybeSingle();
+      if (settings) {
+        if (settings.tagline) document.getElementById('cafe-tagline').textContent = settings.tagline;
+        if (settings.status_badge) document.getElementById('cafe-status-badge').textContent = settings.status_badge;
+        if (settings.announcement) document.getElementById('cafe-announcement').textContent = settings.announcement;
+        if (settings.address) document.getElementById('cafe-address').textContent = settings.address;
+        if (settings.phone) document.getElementById('cafe-phone-text').textContent = settings.phone;
+      }
+
+      const { data, error } = await db.from('menu_items').select('*').order('sort_order', { ascending: true });
+      if (error || !data) return;
+
+      allMenuItems = data;
+      buildCategoryTabs();
+      renderMenu();
+    }
+
+    function buildCategoryTabs() {
+      const cats = ['all', ...new Set(allMenuItems.map(i => i.category || 'coffee'))];
+      const tabsContainer = document.getElementById('category-tabs');
+      tabsContainer.replaceChildren();
+
+      cats.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `category-btn px-4 py-2.5 rounded-xl whitespace-nowrap transition bg-stone-900/80 border border-bamdad-border text-stone-300 shrink-0 ${cat === currentCategory ? 'active-tab' : ''}`;
+        btn.textContent = CATEGORY_NAMES[cat] || cat.toUpperCase();
+        btn.onclick = () => {
+          currentCategory = cat;
+          document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active-tab'));
+          btn.classList.add('active-tab');
+          renderMenu();
+        };
+        tabsContainer.append(btn);
+      });
+    }
+
+    function renderMenu() {
+      const query = document.getElementById('menu-search').value.trim().toLowerCase();
+      const container = document.getElementById('menu-container');
+
+      const filtered = allMenuItems.filter(item => {
+        const matchCat = (currentCategory === 'all' || item.category === currentCategory);
+        const title = (item.title || item.id).toLowerCase();
+        const desc = (item.description || '').toLowerCase();
+        return matchCat && (title.includes(query) || desc.includes(query));
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p class="col-span-full text-center text-xs text-stone-400 py-8">موردی یافت نشد.</p>`;
+        return;
+      }
+
+      container.innerHTML = filtered.map(item => {
+        const title = item.title || item.id;
+        const isAvailable = item.is_available !== false;
+        const price = new Intl.NumberFormat('fa-IR').format(item.price);
+        const imgSrc = item.image_url && item.image_url.trim() ? item.image_url.trim() : 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=350&auto=format&fit=crop';
+
+        let badge = '';
+        if (!isAvailable) badge = `<span class="text-[9px] bg-red-500/20 text-red-300 px-1.5 py-0.5 rounded-md font-bold">ناموجود</span>`;
+        else if (item.badge) badge = `<span class="text-[9px] bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded-md font-bold">${escapeHtml(item.badge)}</span>`;
+
+        return `
+          <div class="menu-item bg-bamdad-card backdrop-blur-md rounded-2xl p-3 border border-bamdad-border flex gap-3.5 shadow-xl ${!isAvailable ? 'opacity-65' : ''}">
+            <div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 border border-white/10">
+              <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(title)}" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex-1 flex flex-col justify-between py-0.5">
+              <div>
+                <div class="flex items-start justify-between gap-1">
+                  <h3 class="font-bold text-sm text-white">${escapeHtml(title)}</h3>
+                  ${badge}
+                </div>
+                <p class="text-[11px] text-stone-300 mt-1 line-clamp-2">${escapeHtml(item.description || '')}</p>
+              </div>
+              <div class="text-left font-bold text-amber-400 text-sm pt-1">
+                <span>${price}</span> <span class="text-[10px] text-stone-400 font-normal">تومان</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterAndSearch() { renderMenu(); }
+    document.addEventListener('DOMContentLoaded', loadSiteData);
+  </script>
+</body>
+</html>
